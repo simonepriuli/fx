@@ -1,0 +1,19 @@
+{
+  "name": "@simonepriul/fx",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "prepare": "npm run build"
+  },
+  "keywords": ["functional", "result", "typescript"],
+  "author": "Simone Priuli",
+  "license": "ISC",
+  "description": "A functional result type for TypeScript",
+  "devDependencies": {
+    "@types/node": "^24.0.7",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
+  }
+}
