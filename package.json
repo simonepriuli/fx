@@ -1,5 +1,5 @@
 {
-  "name": "@simonepriul/fx",
+  "name": "@fx-ts/fx",
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,9 @@
   },
   "keywords": ["functional", "result", "typescript"],
   "author": "Simone Priuli",
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "ISC",
   "description": "A functional result type for TypeScript",
   "devDependencies": {
