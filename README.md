@@ -14,7 +14,7 @@ A lightweight, type-safe Result type library for TypeScript that provides a func
 ## Installation
 
 ```bash
-npm install fx
+npm install @fx-ts/fx
 ```
 
 ## Quick Start
