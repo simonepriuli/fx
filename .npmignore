@@ -7,8 +7,8 @@ tsup.config.ts
 node_modules/
 package-lock.json
 
-# Build artifacts (will be generated during install)
-dist/
+# Build artifacts (needed in npm package)
+# dist/
 
 # IDE and editor files
 .vscode/
