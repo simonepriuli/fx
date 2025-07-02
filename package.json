@@ -5,9 +5,16 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
-  "keywords": ["functional", "result", "typescript"],
+  "keywords": [
+    "functional",
+    "result",
+    "typescript"
+  ],
   "author": "Simone Priuli",
   "publishConfig": {
     "access": "public"
@@ -15,7 +22,10 @@
   "license": "ISC",
   "description": "A functional result type for TypeScript",
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.0.7",
+    "jest": "^30.0.3",
+    "ts-jest": "^29.4.0",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3"
   }

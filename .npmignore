@@ -93,3 +93,11 @@ jspm_packages/
 
 # TernJS port file
 .tern-port
+
+# Tests
+tests/
+src/test.ts
+*.test.ts
+*.spec.ts
+jest.config.js
+*.md
