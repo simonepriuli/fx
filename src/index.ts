@@ -1,14 +1,15 @@
 // Re-export types
-export type { Result, ResultAsync } from "./types";
+export type { Result, ResultAsync, TaggedError } from "./types";
 
 // Re-export error class
 export { UnhandledError } from "./errors";
 
 // Re-export utility functions
-export { ok, err } from "./utils";
+export { ok, err, tagError, errTagged } from "./utils";
 
 // Import functions
 import { fn } from "./fn";
+import { tagError, errTagged } from "./utils";
 import {
   map,
   mapAsync,
@@ -21,6 +22,11 @@ import {
   unwrapOrElse,
   isOk,
   isErr,
+  catchByTag,
+  catchByTagAsync,
+  catchByTags,
+  catchByTagsAsync,
+  hasTag,
 } from "./transform";
 import {
   all,
@@ -45,6 +51,11 @@ export {
   unwrapOrElse,
   isOk,
   isErr,
+  catchByTag,
+  catchByTagAsync,
+  catchByTags,
+  catchByTagsAsync,
+  hasTag,
 } from "./transform";
 export { all, allAsync, any, zip, zip3, tryCatch, tryCatchAsync } from "./combinators";
 export { fn } from "./fn";
@@ -55,6 +66,10 @@ export const fx = {
   ok: <const R>(success: R) => [null, success] as const,
   err: <const E>(error: E) => [error, null] as const,
   fn: fn,
+
+  // Error tagging utilities
+  tagError,
+  errTagged,
 
   // Transformations
   map,
@@ -68,6 +83,13 @@ export const fx = {
   unwrapOrElse,
   isOk,
   isErr,
+
+  // Error catching
+  catchByTag,
+  catchByTagAsync,
+  catchByTags,
+  catchByTagsAsync,
+  hasTag,
 
   // Combinators
   all,

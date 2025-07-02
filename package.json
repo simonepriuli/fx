@@ -1,6 +1,6 @@
 {
   "name": "@fx-ts/fx",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index.js",
   "scripts": {
     "build": "tsup",

@@ -5,6 +5,7 @@ A lightweight, type-safe Result type library for TypeScript that provides a func
 ## Features
 
 - 🎯 **Type-safe error handling** with Result types
+- 🏷️ **Error tagging** for selective error handling
 - ⚡ **Async support** with ResultAsync
 - 🔧 **Functional transformations** (map, flatMap, andThen)
 - 🎲 **Combinators** for working with multiple Results
@@ -187,6 +188,62 @@ Check if Result is success.
 #### `fx.isErr(result)`
 Check if Result is error.
 
+### Error Tagging
+
+Error tagging allows you to categorize errors and handle them selectively in your pipelines.
+
+#### `fx.tagError(tag, error)`
+Create a tagged error.
+
+```typescript
+const taggedError = fx.tagError("VALIDATION_ERROR", "Invalid input");
+// { tag: "VALIDATION_ERROR", error: "Invalid input" }
+```
+
+#### `fx.errTagged(tag, error)`
+Create a Result with a tagged error.
+
+```typescript
+const result = fx.errTagged("NETWORK_ERROR", "Connection failed");
+// [{ tag: "NETWORK_ERROR", error: "Connection failed" }, null]
+```
+
+#### `fx.catchByTag(result, tag, handler)`
+Catch errors with a specific tag and handle them.
+
+```typescript
+const result = fx.errTagged("VALIDATION_ERROR", "Invalid email");
+
+const handled = fx.catchByTag(
+  result,
+  "VALIDATION_ERROR",
+  (error) => fx.ok(`Handled: ${error}`)
+);
+// [null, "Handled: Invalid email"]
+```
+
+#### `fx.catchByTags(result, tags, handler)`
+Catch errors with any of the specified tags.
+
+```typescript
+const result = fx.errTagged("NETWORK_ERROR", "Connection failed");
+
+const handled = fx.catchByTags(
+  result,
+  ["VALIDATION_ERROR", "NETWORK_ERROR"],
+  (error) => fx.ok(`Handled: ${error}`)
+);
+// [null, "Handled: Connection failed"]
+```
+
+#### `fx.hasTag(error, tag)`
+Check if an error has a specific tag.
+
+```typescript
+const taggedError = fx.tagError("VALIDATION_ERROR", "Invalid input");
+const hasTag = fx.hasTag(taggedError, "VALIDATION_ERROR"); // true
+```
+
 ### Combinators
 
 #### `fx.all(results)`
@@ -301,6 +358,55 @@ const validateUser = (email: string, age: number) => {
 
 const result = validateUser('user@example.com', 25);
 // [null, ["user@example.com", 25]]
+```
+
+### Error Tagging Pipeline
+
+```typescript
+import { fx } from 'fx';
+
+const validateInput = (input: string) => {
+  if (!input) return fx.errTagged("VALIDATION_ERROR", "Input is required");
+  if (input.length < 3) return fx.errTagged("VALIDATION_ERROR", "Input too short");
+  return fx.ok(input);
+};
+
+const processData = (input: string) => {
+  if (input === "error") return fx.errTagged("PROCESSING_ERROR", "Failed to process");
+  return fx.ok(input.toUpperCase());
+};
+
+const saveData = (data: string) => {
+  if (data === "ERROR") return fx.errTagged("DATABASE_ERROR", "Failed to save");
+  return fx.ok(`Saved: ${data}`);
+};
+
+// Pipeline with selective error handling
+const pipeline = (input: string) => {
+  const step1 = validateInput(input);
+  
+  const step2 = fx.catchByTag(
+    step1,
+    "VALIDATION_ERROR",
+    (error) => fx.ok(`Validation failed: ${error}`)
+  );
+  
+  const step3 = processData(fx.unwrap(step2));
+  
+  const step4 = fx.catchByTag(
+    step3,
+    "PROCESSING_ERROR",
+    (error) => fx.ok(`Processing failed: ${error}`)
+  );
+  
+  return saveData(fx.unwrap(step4));
+};
+
+const result = pipeline("hello");
+// [null, "Saved: HELLO"]
+
+const errorResult = pipeline("error");
+// [null, "Saved: Processing failed: Failed to process"]
 ```
 
 ## License
